@@ -1,4 +1,5 @@
 import argparse
+from ctypes import Union
 import re
 from typing import Tuple
 
@@ -19,6 +20,16 @@ def read_arguments():
     return parser.parse_args()
 
 
+def get_program_input(arg_input: Union[int, None]) -> int:
+    if arg_input is None:
+        str_input = input('Program input value (positive integer) ? ')
+        if not str_input.isnumeric():
+            raise ValueError('Program input should be a positive integer.')
+        return int(str_input)
+
+    return arg_input
+
+
 def is_legal_fraction(fraction: str) -> bool:
     return re.match(r'^\d+$', fraction) or re.match(r'^\d+\/\d+$', fraction)
 
@@ -27,7 +38,6 @@ def parse_fraction(fraction: str) -> Tuple:
         return tuple(map(int, fraction.split('/')))
     else:
         return (int(fraction), 1)
-
 
 def read_code(file_path: str):
     with open(file_path, 'r', encoding='utf-8') as fi:
@@ -82,12 +92,6 @@ if __name__ == '__main__':
 
     code = read_code(arguments.file_path)
 
-    program_input = arguments.input
-    if program_input is None:
-        str_input = input('Program input value (positive integer) ? ')
-        if not str_input.isnumeric():
-            raise ValueError('Program input should be a positive integer.')
-        
-        program_input = int(str_input)
+    program_input = get_program_input(arguments.input)
     
     run_code(code, program_input, arguments.auto)
