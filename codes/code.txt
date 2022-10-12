@@ -1,0 +1,5 @@
+# Test code
+# Input : 14 - Output : 14
+# Input 15 - Output : 15, 20, 6, 8
+
+3/10 4/3

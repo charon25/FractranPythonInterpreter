@@ -1,0 +1,5 @@
+# Input of the form 2^a*3^b*11
+# Output of the form 5^q*7^r
+# where a = bq + r
+
+91/66 11/13 1/33 85/11 57/119 17/19 11/17 1/3

@@ -1,0 +1,4 @@
+# Input : 3
+# Outputs a sequence containing every 2^F_n*3^F_(n+1) where F_n is the Fibonnaci sequence
+
+23/95 57/23 17/39 130/17 11/14 35/11 19/13 1/19 35/2 13/7 7/1

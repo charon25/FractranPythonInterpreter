@@ -1,0 +1,4 @@
+# Input of the form 2^a*3^b
+# Output of the form 5^(a*b)
+
+455/33 11/13 1/11 3/7 11/2 1/3

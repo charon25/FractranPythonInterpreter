@@ -1,0 +1,4 @@
+# Input of the form 2^N
+# Outputs a sequence where every power of 2 exponent is is the reduced Syracuse sequence starting at N
+
+1/11 136/15 5/17 4/5 26/21 7/13 1/7 33/4 5/2 7/1

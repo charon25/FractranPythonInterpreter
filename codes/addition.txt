@@ -1,0 +1,4 @@
+# Input of the form 2^a*3^b
+# Output of the form 3^(a+b)
+
+3/2
