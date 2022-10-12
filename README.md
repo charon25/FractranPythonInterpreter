@@ -8,17 +8,18 @@ This repo contains a FRACTRAN interpreter written in Python 3. FRACTRAN is an es
 python fractran.py code.txt [input] [additional optional arguments...]
 ```
 
-Where `code.txt` is the path to the source code (format explained below) and `input` is the input to the program. If provided, it should be a positive integer. If not provided, the program will prompt the user to enter one (which should also be a positive integer).
+Where `code.txt` is the path to the source code (format explained below) and `input` is the input to the program. If provided, it should be a positive integer or a sequence of positive integers. If not provided, the program will prompt the user to enter it (which should also be a positive integer or a sequence).
 
 The additional arguments are :
  - `-a` (or `--auto`) : does not prompt the user to press Enter between each output. Be careful if it is an infinite loop program, as it will print non-stop.
+ - `-p` (or `--prime_mode`) : switch the input and output to "prime mode". This mean the number will be represented as a sequence of prime powers. E.g. 2 is [1], 75 is [0, 1, 2] and 23 is [0, 0, 0, 0, 0, 0, 0, 0, 1]. In this case, the input can be a sequence of positive integers.
 
 ### Usage examples
 
 `code.txt` is the file found in the `codes` folder.
 
 ```bash
-> python code.txt 15
+> python fractran.py codes\code.txt 15
 You must press enter after every output to continue the program.
 
 15
@@ -29,13 +30,21 @@ You must press enter after every output to continue the program.
 
 
 ```bash
-> python fractran.py code.txt -a
+> python fractran.py codes\code.txt -a
 Program input value (positive integer) ? 15
 
 15
 20
 6
 8
+```
+```bash
+> python fractran.py codes\code.txt 0 1 1 -p -a
+
+[15]    0 1 1
+[20]    2 0 1
+[6]     1 1
+[8]     3
 ```
 
 ## Code format
