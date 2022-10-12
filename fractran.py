@@ -1,7 +1,6 @@
 import argparse
-from ctypes import Union
 import re
-from typing import Tuple
+from typing import Tuple, Union
 
 
 COMMENT_SYMBOLS = ('#', '%', ';', '!', '/')
