@@ -13,6 +13,8 @@ Where `code.txt` is the path to the source code (format explained below) and `in
 The additional arguments are :
  - `-a` (or `--auto`) : does not prompt the user to press Enter between each output. Be careful if it is an infinite loop program, as it will print non-stop.
  - `-p` (or `--prime_mode`) : switch the input and output to "prime mode". This mean the number will be represented as a sequence of prime powers. E.g. 2 is [1], 75 is [0, 1, 2] and 23 is [0, 0, 0, 0, 0, 0, 0, 0, 1]. In this case, the input can be a sequence of positive integers.
+ - `-n` (or `--hide_number`) : if in prime mode, hides the real number and only prints the prime powers representation.
+ - `-f` (or `--filter`), followed by a sequence of space-separated `0`, `+` or `*` : filter what numbers will be printed based on their prime power representation. `0` forces the prime to not be present in the number, `+` forces the prime to be at least present once, and `*` allows everything. If this argument is provided, everything after the last character will be considered `0`, and the number will be filtered accordingly. E.g. `-f +` will only prints powers of 2, and `-f * + 0 +` will prints numbers of the forme $2^a3^b7^c$ where $a \ge 0$, $b > 0$ and $c > 0$. Anything divisible by 5 or a prime greater than 7 will be filtered out.
 
 ### Usage examples
 
@@ -45,6 +47,44 @@ Program input value (positive integer) ? 15
 [20]    2 0 1
 [6]     1 1
 [8]     3
+```
+```bash
+> python fractran.py codes\primes.txt 1 -p -f + -a
+
+[2]     1
+[4]     2
+[8]     3
+[32]    5
+[128]   7
+[2048]  11
+[8192]  13
+[131072]        17
+[524288]        19
+[8388608]       23
+[536870912]     29
+[2147483648]    31
+[137438953472]  37
+[2199023255552] 41
+[8796093022208] 43
+```
+```bash
+> python fractran.py codes\primes.txt 1 -p -f + -a -n
+
+1
+2
+3
+5
+7
+11
+13
+17
+19
+23
+29
+31
+37
+41
+43
 ```
 
 ## Code format

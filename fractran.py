@@ -23,6 +23,8 @@ def read_arguments():
     parser.add_argument('input', nargs='*', type=positive, help="Input to the program. If not specified, will prompt the user.")
     parser.add_argument('--auto', '-a', action='store_true', help="Print all the outputs without stopping and waiting for the user.")
     parser.add_argument('--prime_mode', '-p', action='store_true', help="Turn into 'primes' mode : the input and output will be the sequence of power in the prime decomposition of the value.")
+    parser.add_argument('--hide_number', '-n', action='store_true', help="If in prime mode, does not show the number beside its prime powers representation.")
+    parser.add_argument('--filter', '-f', nargs='+', help="Filter the output : only prints number respecting the primes power filter.")
 
     return parser.parse_args()
 
@@ -48,7 +50,6 @@ def prime_powers_to_number(powers: List[int]) -> int:
     return n
 
 
-
 def get_program_input(arg_input: Union[int, None], prime_mode: bool) -> int:
     if prime_mode:
         if len(arg_input) == 0 or arg_input is None:
@@ -66,6 +67,22 @@ def get_program_input(arg_input: Union[int, None], prime_mode: bool) -> int:
             return int(str_input)
 
         return arg_input[0]
+
+
+def get_filter(filter: List[str]) -> Union[None, List[bool]]:
+    if filter is None or len(filter) == 0:
+        return None
+
+    program_filter = []
+
+    for char in filter:
+        if char in ('0', '*', '+'):
+            program_filter.append(char)
+        else:
+            raise ValueError(f'Invalid filter token: {char}')
+
+    return program_filter
+
 
 
 def is_legal_fraction(fraction: str) -> bool:
@@ -101,14 +118,39 @@ def read_code(file_path: str):
     return code
 
 
-def format_output(value: int, prime_mode: bool):
+def format_output(value: int, prime_mode: bool, hide_number: bool):
     if prime_mode:
-        return f"[{value}]\t{' '.join(map(str, number_to_prime_powers(value)))}"
+        if hide_number:
+            return f"{' '.join(map(str, number_to_prime_powers(value)))}"
+        else:
+            return f"[{value}]\t{' '.join(map(str, number_to_prime_powers(value)))}"
     else:
         return value
 
 
-def run_code(code, program_input, auto_print: bool = False, prime_mode: bool = False):
+def filter_passed(filter: Union[None, List[bool]], value: int) -> bool:
+    if filter is None:
+        return True
+
+    filter_length = len(filter)
+    powers = number_to_prime_powers(value)
+
+    if len(powers) > filter_length:
+        return False
+
+    for i, power in enumerate(powers):
+        if filter[i] == '0':
+            if power > 0:
+                return False
+            return power == 0
+        elif filter[i] == '+':
+            if power == 0:
+                return False
+
+    return True
+
+
+def run_code(code, program_input, filter, auto_print: bool = False, prime_mode: bool = False, hide_number: bool = False):
     if not auto_print:
         print('You must press enter after every output to continue the program.')
     print()
@@ -116,7 +158,7 @@ def run_code(code, program_input, auto_print: bool = False, prime_mode: bool = F
     value = program_input
     end_line = '\n' if auto_print else ''
 
-    print(format_output(value, prime_mode))
+    print(format_output(value, prime_mode, hide_number))
     while True:
         for numerator, denominator in code:
             # If a fraction F is found such that F * value is an integer, then this is the next value and we stop the loop
@@ -127,9 +169,11 @@ def run_code(code, program_input, auto_print: bool = False, prime_mode: bool = F
         else:
             return
         
-        print(format_output(value, prime_mode), end=end_line)
-        if not auto_print:
-            input()
+        if filter_passed(filter, value):
+            print(format_output(value, prime_mode, hide_number), end=end_line)
+
+            if not auto_print:
+                input()
 
 
 if __name__ == '__main__':
@@ -140,5 +184,7 @@ if __name__ == '__main__':
     code = read_code(arguments.file_path)
 
     program_input = get_program_input(arguments.input, arguments.prime_mode)
+
+    program_filter = get_filter(arguments.filter)
     
-    run_code(code, program_input, arguments.auto, arguments.prime_mode)
+    run_code(code, program_input, program_filter, arguments.auto, arguments.prime_mode, arguments.hide_number)
