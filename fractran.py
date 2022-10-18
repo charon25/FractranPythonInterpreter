@@ -162,8 +162,8 @@ def run_code(code, program_input, filter, auto_print: bool = False, prime_mode: 
     while True:
         for numerator, denominator in code:
             # If a fraction F is found such that F * value is an integer, then this is the next value and we stop the loop
-            if value % denominator == 0:
-                value = (value // denominator) * numerator
+            if (value * numerator) % denominator == 0:
+                value = (value * numerator) // denominator
                 break
         # If none was found, the program ends
         else:
